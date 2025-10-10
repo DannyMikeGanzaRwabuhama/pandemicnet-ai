@@ -1,0 +1,32 @@
+protobuf
+# FastAPI and Server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.19
+
+# Neo4j
+neo4j==5.16.0
+
+# ML and Data Science
+scikit-learn==1.4.0
+numpy==1.26.3
+pandas==2.2.0
+networkx==3.2.1
+
+# AI
+google-generativeai==0.3.2
+
+# Utilities
+python-dotenv==1.0.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Streamlit UI
+streamlit==1.30.0
+plotly==5.18.0
+requests==2.31.0
+
+# Testing (optional)
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0
