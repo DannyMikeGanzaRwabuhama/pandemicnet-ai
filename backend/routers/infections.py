@@ -4,7 +4,7 @@ Track infections and calculate exposure risks
 """
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List
-from backend.models import InfectionReport, InfectionResponse, RiskPrediction
+from backend.models import InfectionReport, InfectionResponse, RiskPrediction, SuperSpreaderResponse
 from backend.database import get_db, Neo4jConnection
 from backend.services.ml_service import get_ml_service, MLService
 from backend.services.ai_service import get_ai_service, AIService
@@ -118,7 +118,7 @@ async def get_infection_risk(
     }
 
 
-@router.get("/superspreaders", response_model=List[dict])
+@router.get("/superspreaders", response_model=SuperSpreaderResponse)
 async def get_super_spreaders(
         threshold: int = 10,
         ai_service: AIService = Depends(get_ai_service),
@@ -130,7 +130,7 @@ async def get_super_spreaders(
     superspreaders = network_service.find_superspreaders(threshold)
 
     if not superspreaders:
-        return []
+        return {"alert": "No superspreaders found", "count": 0, "superspreaders": []}
 
     # Generate AI alert
     alert = ai_service.generate_superspreader_alert(superspreaders)

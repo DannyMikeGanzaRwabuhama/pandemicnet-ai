@@ -152,7 +152,7 @@ class AIService:
             prompt = f"""
 Provide a brief network analysis summary (3-4 sentences) based on these statistics:
 
-- Total individuals: {stats.get('total_contacts', 0)}
+- Total individuals: {stats.get('total_individuals', 0)}
 - Total contacts: {stats.get('total_contacts', 0)}
 - Infected: {stats.get('infected_count', 0)}
 - Average contacts per person: {stats.get('average_contacts', 0)}

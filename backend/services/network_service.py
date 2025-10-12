@@ -4,6 +4,8 @@ Graph algorithms and network metrics using Neo4j
 """
 from backend.database import get_db
 from typing import Dict, List
+from datetime import date
+from neo4j.time import Date as Neo4jDate
 import logging
 
 logger = logging.getLogger(__name__)
@@ -129,7 +131,24 @@ class NetworkService:
                 """
 
         results = self.db.execute_query(query, {"threshold": threshold})
-        return results
+        # Convert Neo4j date to Python date
+        cleaned = []
+        for record in results:
+            infection_date = record.get("infection_date")
+            if isinstance(infection_date, Neo4jDate):
+                infection_date = date(
+                    infection_date.year,
+                    infection_date.month,
+                    infection_date.day
+                )
+
+            cleaned.append({
+                "unique_id": record.get("unique_id"),
+                "contact_count": record.get("contact_count"),
+                "infection_date": infection_date,
+            })
+
+        return cleaned
 
     def calculate_infection_chains(self, source_id: str, max_depth: int = 5) -> Dict:
         """

@@ -2,6 +2,8 @@
 Pydantic models for request/response validation
 Defines data schemas for API endpoints
 """
+import datetime
+
 from pydantic import BaseModel, Field, field_validator, ValidationInfo
 from typing import Optional, List
 from datetime import date
@@ -136,3 +138,13 @@ class VenueResponse(BaseModel):
     venue_type: Optional[str]
     visit_count: int = 0
     last_visit: Optional[str]
+
+class SuperSpreader(BaseModel):
+    unique_id: str
+    contact_count: int
+    infection_date: datetime.date
+
+class SuperSpreaderResponse(BaseModel):
+    alert: str
+    count: int
+    superspreaders: List[SuperSpreader]
