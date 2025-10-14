@@ -1,10 +1,12 @@
 'use client';
 
 import React, {useState} from "react";
+
 import {QueryClient} from "@tanstack/query-core";
+import {ThemeProvider as NextThemesProvider} from "next-themes"
 import {QueryClientProvider} from "@tanstack/react-query";
 
-export function Providers({children}: { children: React.ReactNode }) {
+export function Providers({children, ...props}: React.ComponentProps<typeof NextThemesProvider>) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -19,7 +21,9 @@ export function Providers({children}: { children: React.ReactNode }) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            {children}
+            <NextThemesProvider {...props}>
+                {children}
+            </NextThemesProvider>
         </QueryClientProvider>
     )
 }

@@ -1,265 +1,269 @@
 'use client';
 
-
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {useNetworkStats, useSuperspreaders} from '@/hooks/useNetwork';
-import {Users, Activity, AlertTriangle, TrendingUp, Map, BarChart3, Search} from 'lucide-react';
-import Link from 'next/link';
 import {Button} from '@/components/ui/button';
+import {useNetworkStats, useSuperspreaders} from '@/hooks/useNetwork';
+import {
+    InfectionTrendChart,
+    NetworkDistributionChart,
+    RiskDistributionChart,
+    ContactFrequencyChart,
+} from '@/components/charts/InfectionTrendChart';
 
+import {
+    Users,
+    Activity,
+    AlertTriangle,
+    TrendingUp,
+    Network,
+} from 'lucide-react';
+import Link from 'next/link';
+
+// =======================================
+// Metric Card
+// =======================================
 function MetricCard({
                         title,
                         value,
                         subtitle,
                         icon: Icon,
                         trend,
-                        color = 'blue'
+                        variant = 'default',
                     }: {
     title: string;
     value: string | number;
     subtitle?: string;
     icon: any;
     trend?: { value: number; label: string };
-    color?: 'blue' | 'red' | 'orange' | 'green'
+    variant?: 'default' | 'destructive' | 'success' | 'warning';
 }) {
-    const colorClasses = {
-        blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-        red: 'bg-red-500/10 text-red-400 border-red-500/20',
-        orange: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-        green: 'bg-green-500/10 text-green-400 border-green-500/20',
+    const variantStyles = {
+        default: 'bg-primary/10 text-primary border-primary/20',
+        destructive: 'bg-destructive/10 text-destructive border-destructive/20',
+        success: 'bg-chart-4/20 text-chart-4 border-chart-4/30',
+        warning: 'bg-chart-2/20 text-chart-2 border-chart-2/30',
     };
 
     return (
-        <Card className={"bg-slate-900 border-slate-800"}>
-            <CardHeader className={"flex items-center justify-between pb-2"}>
-                <CardTitle className={"text-sm font-medium text-slate-400"}>
-                    {title}
-                </CardTitle>
-                <div className={`p-2 rounded-lg border ${colorClasses[color]}`}>
-                    <Icon className={"w-4 h-4"}/>
+        <Card className="bg-card border-border hover:shadow-lg transition-all duration-300">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+                <div className={`p-2 rounded-lg border ${variantStyles[variant]}`}>
+                    <Icon className="w-4 h-4"/>
                 </div>
             </CardHeader>
             <CardContent>
-                <div className={"text-3xl font-bold text-slate-100"}>{value}</div>
-                {subtitle && (
-                    <p className={"text-xs text-slate-500 mt-1"}>{subtitle}</p>
-                )}
+                <div className="text-3xl font-bold text-foreground">{value}</div>
+                {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
                 {trend && (
                     <div className="flex items-center mt-2 text-xs">
-                        <TrendingUp className={`w-3 h-3 mr-1 ${trend.value >= 0 ? 'text-green-400' : 'text-red-400'}`}/>
-                        <span className={trend.value >= 0 ? 'text-green-400' : 'text-red-400'}>
-                          {trend.value >= 0 ? '+' : ''}{trend.value}%
-                        </span>
-                        <span className="text-slate-500 ml-1">{trend.label}</span>
+                        <TrendingUp
+                            className={`w-3 h-3 mr-1 ${
+                                trend.value >= 0 ? 'text-chart-4' : 'text-destructive'
+                            }`}
+                        />
+                        <span className={trend.value >= 0 ? 'text-chart-4' : 'text-destructive'}>
+              {trend.value >= 0 ? '+' : ''}
+                            {trend.value}%
+            </span>
+                        <span className="text-muted-foreground ml-1">{trend.label}</span>
                     </div>
                 )}
             </CardContent>
         </Card>
-    )
+    );
 }
 
+// =======================================
+// Dashboard
+// =======================================
 export default function Dashboard() {
-    const {data: stats, isLoading: statsLoading} = useNetworkStats();
+    const {data: statsData, isLoading: statsLoading} = useNetworkStats();
     const {data: superspreaders} = useSuperspreaders(5);
 
     if (statsLoading) {
         return (
             <div className="flex items-center justify-center h-[calc(100vh-200px)]">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"/>
-                    <p className="text-slate-400">Loading dashboard...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"/>
+                    <p className="text-muted-foreground">Loading dashboard...</p>
                 </div>
             </div>
         );
     }
 
-    const infectionRate = stats ? ((stats.infected_count / stats.total_individuals) * 100).toFixed(1) : '0';
+    const stats = statsData?.statistics;
+    const aiInsights = statsData?.ai_insights;
+
+    const infectionRate =
+        stats?.infected_count && stats?.total_individuals
+            ? ((stats.infected_count / stats.total_individuals) * 100).toFixed(1)
+            : '0';
 
     return (
-        <div className={"space-y-6"}>
-            {/*    Header*/}
-            <div className={"flex items-center justify-between"}>
+        <div className="space-y-6">
+            {/* Header */}
+            <div className="flex items-center justify-between">
                 <div>
-                    <h1 className={"text-3xl font-bold text-slate-100"}>Dashboard</h1>
-                    <p className="text-slate-400 mt-1">
+                    <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+                    <p className="text-muted-foreground mt-1">
                         Real-time pandemic monitoring and contact tracing overview
                     </p>
                 </div>
-                <div className={"flex gap-2"}>
-                    <Link href={"/trace"}>
-                        <Button variant={"outline"} className={"border-slate-700"}>
-                            Trace Contacts
-                        </Button>
+                <div className="flex gap-2">
+                    <Link href="/trace">
+                        <Button variant="secondary">Trace Contacts</Button>
                     </Link>
-                    <Link href={"/network"}>
-                        <Button className={"bg-blue-600 hover:bg-blue-700"}>
-                            View Network
-                        </Button>
+                    <Link href="/network">
+                        <Button variant={"default"}>View Network</Button>
                     </Link>
                 </div>
             </div>
 
-            {/*    Metrics Grid*/}
-            <div className={"grid gap-4 md:grid-cols-2 lg:grid-cols-4"}>
+            {/*/!* ✅ AI Insights *!/*/}
+            {/*{aiInsights && (*/}
+            {/*    <Card className="border-border">*/}
+            {/*        <CardHeader className="flex items-center gap-2">*/}
+            {/*            <Brain className="w-5 h-5 text-primary"/>*/}
+            {/*            <CardTitle>AI Insights</CardTitle>*/}
+            {/*        </CardHeader>*/}
+            {/*        <CardContent>*/}
+            {/*            <p className="text-sm text-muted-foreground">{aiInsights}</p>*/}
+            {/*        </CardContent>*/}
+            {/*    </Card>*/}
+            {/*)}*/}
+
+            {/* Metrics Grid */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <MetricCard
-                    title={"Total Individuals"}
+                    title="Total Individuals"
                     value={stats?.total_individuals || 0}
-                    subtitle={"In network"}
+                    subtitle="In network"
                     icon={Users}
-                    color={"blue"}
+                    trend={{value: 12, label: 'vs last week'}}
                 />
                 <MetricCard
                     title="Infected Cases"
                     value={stats?.infected_count || 0}
                     subtitle={`${infectionRate}% infection rate`}
                     icon={AlertTriangle}
-                    color="red"
+                    variant="destructive"
+                    trend={{value: -5, label: 'vs last week'}}
                 />
                 <MetricCard
                     title="Total Contacts"
                     value={stats?.total_contacts || 0}
                     subtitle="Recorded interactions"
                     icon={Activity}
-                    color="green"
+                    variant="success"
+                    trend={{value: 8, label: 'vs last week'}}
                 />
                 <MetricCard
                     title="Avg. Connections"
                     value={stats?.average_contacts?.toFixed(1) || '0'}
                     subtitle="Per individual"
                     icon={TrendingUp}
-                    color="orange"
+                    variant="warning"
                 />
             </div>
 
-            {/*    Main Content Grid*/}
-            <div className={"grid gap-6 lg:grid-cols-3"}>
-                {/*    Network Overview*/}
-                <Card className={"lg:col-span-2 bg-slate-900 border-slate-800"}>
+            {/* Charts */}
+            <div className="grid gap-6 lg:grid-cols-2">
+                <Card className="bg-card border-border">
                     <CardHeader>
-                        <CardTitle className={"text-slate-100"}>Network Statistics</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className={"space-y-4"}>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-slate-400">Network Density</span>
-                                <span className="text-sm font-semibold text-slate-100">
-                                  {stats?.density?.toFixed(3) || 'N/A'}
-                                </span>
-                            </div>
-                            <div className={"w-full bg-slate-800 rounded-full h-2"}>
-                                <div
-                                    className={"bg-blue-500 h-2 rounded-full transition-all"}
-                                    style={{width: `${((stats?.density || 0) * 100).toFixed(1)}%`}}
-                                />
-                            </div>
-
-                            <div className={"flex items-center justify-between pt-2"}>
-                                <span className="text-sm text-slate-400">Max Degrees of Separation</span>
-                                <span className="text-sm font-semibold text-slate-100">
-                                  {stats?.max_degree_separation || 0}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-slate-400">Network Clusters</span>
-                                <span className="text-sm font-semibold text-slate-100">
-                                  {stats?.clusters || 0}
-                                </span>
-                            </div>
-
-                            <div className={"pt-4"}>
-                                <Link href={"/analytics"}>
-                                    <Button variant={"outline"} className={"w-full border-slate-700"}>
-                                        View Detailed Analytics
-                                    </Button>
-                                </Link>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/*    Superspreaders Alert*/}
-                <Card className={"bg-slate-900 border-slate-800"}>
-                    <CardHeader>
-                        <CardTitle className={"text-slate-100 flex items-center gap-2"}>
-                            <AlertTriangle className={"w-5 h-5 text-orange-500"}/>
-                            Superspreaders
+                        <CardTitle className="text-foreground flex items-center gap-2">
+                            <Activity className="w-5 h-5 text-primary"/>
+                            Infection Trend
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {superspreaders && superspreaders.length > 0 ? (
-                            <div className={"space-y-3"}>
-                                {superspreaders.slice(0, 5).map((spreader: any) => (
-                                    <div
-                                        key={spreader.unique_id}
-                                        className={"flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700"}
-                                    >
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-slate-100 truncate">
-                                                {spreader.unique_id}
-                                            </p>
-                                            <p className="text-xs text-slate-400">
-                                                {spreader.location || 'Unknown location'}
-                                            </p>
-                                        </div>
-                                        <div className={"text-right ml-2"}>
-                                            <p className={"text-sm font-bold text-orange-500"}>
-                                                {spreader.contact_count}
-                                            </p>
-                                            <p className={"text-xs text-slate-500"}>contacts</p>
-                                        </div>
-                                    </div>
-                                ))}
-                                <Link href="/trace">
-                                    <Button variant="outline" className="w-full border-slate-700 mt-2">
-                                        Trace All Contacts
-                                    </Button>
-                                </Link>
-                            </div>
-                        ) : (
-                            <div className="text-center py-8">
-                                <AlertTriangle className="w-12 h-12 text-slate-700 mx-auto mb-2"/>
-                                <p className="text-sm text-slate-400">No superspreaders detected</p>
-                            </div>
-                        )}
+                        <InfectionTrendChart/>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-card border-border">
+                    <CardHeader>
+                        <CardTitle className="text-foreground flex items-center gap-2">
+                            <AlertTriangle className="w-5 h-5 text-destructive"/>
+                            Risk Distribution
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <RiskDistributionChart/>
                     </CardContent>
                 </Card>
             </div>
 
-            {/*    Quick Actions*/}
-            <Card className={"bg-slate-900 border-slate-800"}>
+            {/* Network + Superspreaders */}
+            <div className="grid gap-6 lg:grid-cols-3">
+                <Card className="lg:col-span-2 bg-card border-border">
+                    <CardHeader>
+                        <CardTitle className="text-foreground flex items-center gap-2">
+                            <Network className="w-5 h-5 text-primary"/>
+                            Network Distribution
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <NetworkDistributionChart/>
+                    </CardContent>
+                </Card>
+
+                {/*<Card className="bg-card border-border">*/}
+                {/*    <CardHeader>*/}
+                {/*        <CardTitle className="text-foreground flex items-center gap-2">*/}
+                {/*            <AlertTriangle className="w-5 h-5 text-chart-2"/>*/}
+                {/*            Superspreaders*/}
+                {/*        </CardTitle>*/}
+                {/*    </CardHeader>*/}
+                {/*    <CardContent>*/}
+                {/*        {superspreaders && superspreaders.length > 0 ? (*/}
+                {/*            <div className="space-y-3">*/}
+                {/*                {superspreaders.map((spreader: any) => (*/}
+                {/*                    <div*/}
+                {/*                        key={spreader.unique_id}*/}
+                {/*                        className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border"*/}
+                {/*                    >*/}
+                {/*                        <div className="flex-1 min-w-0">*/}
+                {/*                            <p className="text-sm font-medium text-foreground truncate">*/}
+                {/*                                {spreader.unique_id}*/}
+                {/*                            </p>*/}
+                {/*                            <p className="text-xs text-muted-foreground">*/}
+                {/*                                {spreader.location || 'Unknown'}*/}
+                {/*                            </p>*/}
+                {/*                        </div>*/}
+                {/*                        <div className="text-right ml-2">*/}
+                {/*                            <p className="text-sm font-bold text-chart-2">*/}
+                {/*                                {spreader.contact_count}*/}
+                {/*                            </p>*/}
+                {/*                            <p className="text-xs text-muted-foreground">contacts</p>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+                {/*                ))}*/}
+                {/*            </div>*/}
+                {/*        ) : (*/}
+                {/*            <div className="text-center py-8">*/}
+                {/*                <AlertTriangle className="w-10 h-10 text-muted-foreground mx-auto mb-2"/>*/}
+                {/*                <p className="text-sm text-muted-foreground">*/}
+                {/*                    No superspreaders detected*/}
+                {/*                </p>*/}
+                {/*            </div>*/}
+                {/*        )}*/}
+                {/*    </CardContent>*/}
+                {/*</Card>*/}
+            </div>
+
+            {/* Contact Frequency */}
+            <Card className="bg-card border-border">
                 <CardHeader>
-                    <CardTitle className="text-slate-100">Quick Actions</CardTitle>
+                    <CardTitle className="text-foreground flex items-center gap-2">
+                        <Activity className="w-5 h-5 text-primary"/>
+                        Contact Frequency
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className={"grid gap-4 sm:grid-cols-2 lg:grid-cols-4"}>
-                        <Link href={"/network"}>
-                            <Button variant={"outline"} className={"w-full h-20 border-slate-700 flex flex-col gap-2"}>
-                                <Activity className={"w-6 h-6"}/>
-                                <span>View Network Graph</span>
-                            </Button>
-                        </Link>
-                        <Link href="/map">
-                            <Button variant="outline" className="w-full h-20 border-slate-700 flex flex-col gap-2">
-                                <Map className="w-6 h-6"/>
-                                <span>Geographic View</span>
-                            </Button>
-                        </Link>
-                        <Link href="/trace">
-                            <Button variant="outline" className="w-full h-20 border-slate-700 flex flex-col gap-2">
-                                <Search className="w-6 h-6"/>
-                                <span>Trace Contacts</span>
-                            </Button>
-                        </Link>
-                        <Link href="/analytics">
-                            <Button variant="outline" className="w-full h-20 border-slate-700 flex flex-col gap-2">
-                                <BarChart3 className="w-6 h-6"/>
-                                <span>View Analytics</span>
-                            </Button>
-                        </Link>
-                    </div>
+                    <ContactFrequencyChart/>
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

@@ -3,7 +3,6 @@ Infection reporting and risk assessments endpoints
 Track infections and calculate exposure risks
 """
 from fastapi import APIRouter, HTTPException, Depends
-from typing import List
 from backend.models import InfectionReport, InfectionResponse, RiskPrediction, SuperSpreaderResponse
 from backend.database import get_db, Neo4jConnection
 from backend.services.ml_service import get_ml_service, MLService

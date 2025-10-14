@@ -1,23 +1,22 @@
 'use client';
 
-import {useState} from "react";
-import {useQuery} from "@tanstack/react-query";
-import {api} from "@/lib/api";
-import {Button} from "@/components/ui/button";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
     Search,
     Users,
     AlertTriangle,
-    Calendar,
     MapPin,
     Activity,
     Sparkles
 } from 'lucide-react';
-import {format} from 'date-fns';
-import {Input} from "@/components/ui/input";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Alert, AlertDescription} from "@/components/ui/alert";
-import {Badge} from "@/components/ui/badge";
+import { format } from 'date-fns';
 
 export default function TracePage() {
     const [searchId, setSearchId] = useState('');
@@ -25,7 +24,7 @@ export default function TracePage() {
     const [days, setDays] = useState(14);
 
     // Fetch trace results
-    const {data: traceResult, isLoading, error} = useQuery({
+    const { data: traceResult, isLoading, error } = useQuery({
         queryKey: ['trace', activeId, days],
         queryFn: () => api.traceContacts(activeId!, days),
         enabled: !!activeId,
@@ -38,8 +37,8 @@ export default function TracePage() {
     };
 
     return (
-        <div className={"space-y-6"}>
-            {/*    Header*/}
+        <div className="space-y-6">
+            {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-slate-100">Contact Tracing</h1>
                 <p className="text-slate-400 mt-1">
@@ -47,8 +46,8 @@ export default function TracePage() {
                 </p>
             </div>
 
-            {/*    Search Bar*/}
-            <Card className="bg-slate-900 border-slate-800">
+            {/* Search Bar */}
+            <Card>
                 <CardContent className="pt-6">
                     <div className="flex gap-4">
                         <div className="flex-1">
@@ -57,7 +56,6 @@ export default function TracePage() {
                                 value={searchId}
                                 onChange={(e) => setSearchId(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                className="bg-slate-800 border-slate-700 text-slate-100"
                             />
                         </div>
                         <div className="w-32">
@@ -68,15 +66,13 @@ export default function TracePage() {
                                 onChange={(e) => setDays(parseInt(e.target.value) || 14)}
                                 min={1}
                                 max={90}
-                                className="bg-slate-800 border-slate-700 text-slate-100"
                             />
                         </div>
                         <Button
                             onClick={handleSearch}
-                            className="bg-blue-600 hover:bg-blue-700"
                             disabled={!searchId.trim()}
                         >
-                            <Search className="w-4 h-4 mr-2"/>
+                            <Search className="w-4 h-4 mr-2" />
                             Trace
                         </Button>
                     </div>
@@ -90,7 +86,7 @@ export default function TracePage() {
             {isLoading && (
                 <div className="flex items-center justify-center py-12">
                     <div className="text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"/>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
                         <p className="text-slate-400">Tracing contacts...</p>
                     </div>
                 </div>
@@ -99,19 +95,19 @@ export default function TracePage() {
             {/* Error State */}
             {error && (
                 <Alert className="bg-red-500/10 border-red-500/50">
-                    <AlertTriangle className="w-4 h-4 text-red-400"/>
+                    <AlertTriangle className="w-4 h-4 text-red-400" />
                     <AlertDescription className="text-red-400">
                         Failed to trace contacts. Individual may not exist in the database.
                     </AlertDescription>
                 </Alert>
             )}
 
-            {/*    Results*/}
+            {/* Results */}
             {traceResult && !isLoading && (
-                <div className={"space-y-6"}>
-                    {/*    Overview Cards*/}
-                    <div className={"grid gap-4 md:grid-cols-4"}>
-                        <Card className="bg-slate-900 border-slate-800">
+                <div className="space-y-6">
+                    {/* Overview Cards */}
+                    <div className="grid gap-4 md:grid-cols-4">
+                        <Card>
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm text-slate-400">Direct Contacts</CardTitle>
                             </CardHeader>
@@ -122,7 +118,7 @@ export default function TracePage() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-slate-900 border-slate-800">
+                        <Card>
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm text-slate-400">Predicted Contacts</CardTitle>
                             </CardHeader>
@@ -133,7 +129,7 @@ export default function TracePage() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-slate-900 border-slate-800">
+                        <Card>
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm text-slate-400">Max Separation</CardTitle>
                             </CardHeader>
@@ -144,7 +140,7 @@ export default function TracePage() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-slate-900 border-slate-800">
+                        <Card>
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm text-slate-400">Network Size</CardTitle>
                             </CardHeader>
@@ -156,12 +152,12 @@ export default function TracePage() {
                         </Card>
                     </div>
 
-                    {/*    AI insights*/}
+                    {/* AI Insights */}
                     {traceResult.ai_insights && (
                         <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/30">
                             <CardHeader>
                                 <CardTitle className="text-slate-100 flex items-center gap-2">
-                                    <Sparkles className="w-5 h-5 text-purple-400"/>
+                                    <Sparkles className="w-5 h-5 text-purple-400" />
                                     AI Insights
                                 </CardTitle>
                             </CardHeader>
@@ -175,10 +171,10 @@ export default function TracePage() {
 
                     <div className="grid gap-6 lg:grid-cols-2">
                         {/* Direct Contacts */}
-                        <Card className="bg-slate-900 border-slate-800">
+                        <Card>
                             <CardHeader>
                                 <CardTitle className="text-slate-100 flex items-center gap-2">
-                                    <Users className="w-5 h-5"/>
+                                    <Users className="w-5 h-5" />
                                     Direct Contacts ({traceResult.direct_contacts.length})
                                 </CardTitle>
                             </CardHeader>
@@ -197,7 +193,7 @@ export default function TracePage() {
                                                         </p>
                                                         {contact.venue_id && (
                                                             <p className="text-xs text-slate-400 mt-1">
-                                                                <MapPin className="w-3 h-3 inline mr-1"/>
+                                                                <MapPin className="w-3 h-3 inline mr-1" />
                                                                 {contact.venue_id}
                                                             </p>
                                                         )}
@@ -242,7 +238,7 @@ export default function TracePage() {
                                     </div>
                                 ) : (
                                     <div className="text-center py-8">
-                                        <Users className="w-12 h-12 text-slate-700 mx-auto mb-2"/>
+                                        <Users className="w-12 h-12 text-slate-700 mx-auto mb-2" />
                                         <p className="text-sm text-slate-400">No direct contacts found</p>
                                     </div>
                                 )}
@@ -250,10 +246,10 @@ export default function TracePage() {
                         </Card>
 
                         {/* Predicted Contacts (ML) */}
-                        <Card className="bg-slate-900 border-slate-800">
+                        <Card>
                             <CardHeader>
                                 <CardTitle className="text-slate-100 flex items-center gap-2">
-                                    <Sparkles className="w-5 h-5 text-purple-400"/>
+                                    <Sparkles className="w-5 h-5 text-purple-400" />
                                     AI-Predicted Contacts ({traceResult.predicted_contacts.length})
                                 </CardTitle>
                             </CardHeader>
@@ -298,7 +294,7 @@ export default function TracePage() {
                                                                     predicted.risk_level === 'MEDIUM' ? 'bg-yellow-500' :
                                                                         'bg-green-500'
                                                             }`}
-                                                            style={{width: `${predicted.risk_score * 100}%`}}
+                                                            style={{ width: `${predicted.risk_score * 100}%` }}
                                                         />
                                                     </div>
                                                 </div>
@@ -314,8 +310,7 @@ export default function TracePage() {
                                                         <p className="text-xs text-slate-500 mb-1">Top Factors:</p>
                                                         <div className="flex flex-wrap gap-1">
                                                             {predicted.top_factors.slice(0, 3).map((factor, i) => (
-                                                                <Badge key={i} variant="outline"
-                                                                       className="text-xs border-slate-600">
+                                                                <Badge key={i} variant="outline" className="text-xs border-slate-600">
                                                                     {factor.name}
                                                                 </Badge>
                                                             ))}
@@ -327,7 +322,7 @@ export default function TracePage() {
                                     </div>
                                 ) : (
                                     <div className="text-center py-8">
-                                        <Sparkles className="w-12 h-12 text-slate-700 mx-auto mb-2"/>
+                                        <Sparkles className="w-12 h-12 text-slate-700 mx-auto mb-2" />
                                         <p className="text-sm text-slate-400">No predicted contacts</p>
                                     </div>
                                 )}
@@ -335,11 +330,11 @@ export default function TracePage() {
                         </Card>
                     </div>
 
-                    {/*    Degrees of Separation*/}
-                    <Card className="bg-slate-900 border-slate-800">
+                    {/* Degrees of Separation */}
+                    <Card>
                         <CardHeader>
                             <CardTitle className="text-slate-100 flex items-center gap-2">
-                                <Activity className="w-5 h-5"/>
+                                <Activity className="w-5 h-5" />
                                 Degrees of Separation
                             </CardTitle>
                         </CardHeader>
@@ -386,10 +381,10 @@ export default function TracePage() {
 
             {/* Empty State */}
             {!activeId && !isLoading && (
-                <Card className="bg-slate-900 border-slate-800">
+                <Card>
                     <CardContent className="flex items-center justify-center h-64">
                         <div className="text-center">
-                            <Search className="w-16 h-16 text-slate-700 mx-auto mb-4"/>
+                            <Search className="w-16 h-16 text-slate-700 mx-auto mb-4" />
                             <p className="text-slate-400 text-lg font-medium">
                                 Search for an individual to begin contact tracing
                             </p>
@@ -401,5 +396,5 @@ export default function TracePage() {
                 </Card>
             )}
         </div>
-    )
+    );
 }

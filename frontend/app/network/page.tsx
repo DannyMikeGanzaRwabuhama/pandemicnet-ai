@@ -29,7 +29,7 @@ export default function NetworkPage() {
             {/*    Header*/}
             <div className={"flex items-center justify-between"}>
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-100">Network Visualization</h1>
+                    <h1 className="text-3xl font-bold ">Network Visualization</h1>
                     <p className="text-slate-400 mt-1">
                         Interactive contact network graph • {networkData?.nodes.length || 0} nodes
                         • {networkData?.edges.length || 0} connections
@@ -41,16 +41,16 @@ export default function NetworkPage() {
             <div className={"grid gap-4 lg:grid-cols-4"}>
                 {/*    Network Graph - Takes 3 columns*/}
                 <div className={"lg:col-span-3"}>
-                    <Card className={"bg-slate-900 border-slate-800"}>
+                    <Card>
                         <CardContent className={"p-0"}>
                             {networkData && networkData.nodes.length > 0 ? (
                                 <NetworkGraph nodes={networkData.nodes} edges={networkData.edges} width={1200}
                                               height={700} onNodeClick={(node) => setSelectedNodeId(node.id)}
                                               selectedNodeId={selectedNodeId}/>
                             ) : (
-                                <div className={"flex items-center justify-center h-[700px] bg-slate-900 rounded-lg"}>
+                                <div className={"flex items-center justify-center h-[700px] rounded-lg"}>
                                     <div className={"text-center"}>
-                                        <Activity className="w-16 h-16 text-slate-700 mx-auto mb-4"/>
+                                        <Activity className="w-16 h-16 mx-auto mb-4"/>
                                         <p className="text-slate-400">No network data available</p>
                                         <p className="text-sm text-slate-500 mt-2">
                                             Add individuals and contacts to see the network
@@ -65,9 +65,9 @@ export default function NetworkPage() {
                 {/*    Details Panel - 1 column*/}
                 <div className={"lg:col-span-1"}>
                     {selectedNodeId && selectedIndividual ? (
-                        <Card className={"bg-slate-900 border-slate-800 sticky top-4"}>
+                        <Card className={"sticky top-4"}>
                             <CardHeader className={"flex items-center justify-between pb-3"}>
-                                <CardTitle className={"text-lg text-slate-100"}>Node Details</CardTitle>
+                                <CardTitle className={"text-lg "}>Node Details</CardTitle>
                                 <Button
                                     variant={"ghost"}
                                     size={"sm"}
@@ -98,7 +98,7 @@ export default function NetworkPage() {
                                         <Users className="w-4 h-4"/>
                                         <span className="text-xs uppercase tracking-wide">Unique ID</span>
                                     </div>
-                                    <p className="text-sm font-mono text-slate-100 bg-slate-800 px-3 py-2 rounded">
+                                    <p className="text-sm font-mono px-3 py-2 rounded">
                                         {selectedIndividual.unique_id}
                                     </p>
                                 </div>
@@ -110,7 +110,7 @@ export default function NetworkPage() {
                                             <Phone className="w-4 h-4"/>
                                             <span className="text-xs uppercase tracking-wide">Phone</span>
                                         </div>
-                                        <p className="text-sm text-slate-100">
+                                        <p className="text-sm ">
                                             {selectedIndividual.phone_number}
                                         </p>
                                     </div>
@@ -123,7 +123,7 @@ export default function NetworkPage() {
                                             <MapPin className="w-4 h-4"/>
                                             <span className="text-xs uppercase tracking-wide">Location</span>
                                         </div>
-                                        <p className="text-sm text-slate-100">
+                                        <p className="text-sm ">
                                             {selectedIndividual.location}
                                         </p>
                                     </div>
@@ -135,7 +135,7 @@ export default function NetworkPage() {
                                         <Activity className="w-4 h-4"/>
                                         <span className="text-xs uppercase tracking-wide">Connections</span>
                                     </div>
-                                    <p className="text-2xl font-bold text-slate-100">
+                                    <p className="text-2xl font-bold ">
                                         {selectedIndividual.contact_count}
                                     </p>
                                 </div>
@@ -149,7 +149,7 @@ export default function NetworkPage() {
                                         </div>
                                         <div className={"space-y-2"}>
                                             <div className={"flex items-center justify-between"}>
-                                                <span className="text-2xl font-bold text-slate-100">
+                                                <span className="text-2xl font-bold ">
                           {(selectedIndividual.risk_score * 100).toFixed(0)}%
                         </span>
                                                 <Badge
@@ -186,7 +186,7 @@ export default function NetworkPage() {
                                             <Calendar className="w-4 h-4"/>
                                             <span className="text-xs uppercase tracking-wide">Infected Since</span>
                                         </div>
-                                        <p className="text-sm text-slate-100">
+                                        <p className="text-sm ">
                                             {format(new Date(selectedIndividual.infection_date), 'PPP')}
                                         </p>
                                     </div>
@@ -224,11 +224,11 @@ export default function NetworkPage() {
                             </CardContent>
                         </Card>
                     ) : (
-                        <Card className="bg-slate-900 border-slate-800 sticky top-4">
+                        <Card className="sticky top-4">
                             <CardContent className="flex items-center justify-center h-[500px]">
                                 <div className="text-center">
-                                    <Users className="w-12 h-12 text-slate-700 mx-auto mb-3"/>
-                                    <p className="text-sm text-slate-400">Click a node to view details</p>
+                                    <Users className="w-12 h-12 mx-auto mb-3"/>
+                                    <p className="text-sm">Click a node to view details</p>
                                 </div>
                             </CardContent>
                         </Card>

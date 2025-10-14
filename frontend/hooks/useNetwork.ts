@@ -8,12 +8,13 @@ export function useNetwork(limit = 100) {
     return useQuery<NetworkData>({
         queryKey: ['network', limit],
         queryFn: () => api.getNetwork(limit),
-        refetchInterval: 30000, // Refetch every 30 seconds
+        refetchInterval: 30000,
     });
 }
 
+// ✅ Extended: return both statistics + ai_insights
 export function useNetworkStats() {
-    return useQuery<NetworkStats>({
+    return useQuery<{ statistics: NetworkStats; ai_insights?: string }>({
         queryKey: ['network-stats'],
         queryFn: () => api.getNetworkStats(),
         refetchInterval: 30000,
@@ -46,14 +47,12 @@ export function useSuperspreaders(threshold = 10) {
 
 export function useReportInfection() {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: api.reportInfection.bind(api),
         onSuccess: () => {
-            // Invalidate and refetch network data
             queryClient.invalidateQueries({queryKey: ['network']});
             queryClient.invalidateQueries({queryKey: ['network-stats']});
             queryClient.invalidateQueries({queryKey: ['individuals']});
-        }
+        },
     });
 }

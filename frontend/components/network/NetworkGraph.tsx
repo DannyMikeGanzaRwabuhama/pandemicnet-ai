@@ -188,7 +188,7 @@ export default function NetworkGraph({
     }, [nodes, edges, width, height, onNodeClick, selectedNodeId]);
 
     return (
-        <div className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden">
+        <div className="relative w-full h-full rounded-lg overflow-hidden">
             <svg ref={svgRef} className={"w-full h-full"}/>
 
             {/*    Legend*/}
@@ -226,8 +226,8 @@ export default function NetworkGraph({
 
             {/*    Hover tooltip*/}
             {hoveredNode && (
-                <div className="absolute top-4 left-4 bg-slate-800/90 p-3 rounded-lg backdrop-blur">
-                    <p className={"text-sm font-semibold text-slate-100"}>{hoveredNode}</p>
+                <div className="absolute top-4 left-4 p-3 rounded-lg backdrop-blur">
+                    <p className={"text-sm font-semibold border-primary"}>{hoveredNode}</p>
                     {nodes.find(n => n.id === hoveredNode)?.location && (
                         <p className={"text-xs text-slate-400"}>
                             {nodes.find(n => n.id === hoveredNode)?.location}

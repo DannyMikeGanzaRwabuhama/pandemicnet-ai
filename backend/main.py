@@ -15,7 +15,7 @@ from backend.utils.seed_data import seed_database
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -104,9 +104,9 @@ async def health_check():
 @app.post("/seed")
 async def seed_data(num_individuals: int = 50):
     """
-        Seed the database with test data
-        ⚠️ Use only for development/testing
-        """
+    Seed the database with test data
+    ⚠️ Use only for development/testing
+    """
     if not settings.debug:
         raise HTTPException(
             status_code=403,
@@ -121,14 +121,14 @@ async def seed_data(num_individuals: int = 50):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/ml/train")
+@app.post("/ml/train")
 async def train_ml_model():
     """Train or retrain the ML model"""
     try:
         result = ml_service.train_model()
         return result
     except Exception as e:
-        logger.error(f"ML model training failed: {e}")
+        logger.error(f"ML training failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -137,6 +137,15 @@ app.include_router(individuals.router)
 app.include_router(contacts.router)
 app.include_router(infections.router)
 app.include_router(graph.router)
+
+# Phase 3: Agent control router
+try:
+    from backend.routers import agents
+
+    app.include_router(agents.router)
+    logger.info("✅ Agent control endpoints loaded")
+except ImportError:
+    logger.warning("⚠️ Agent endpoints not available (Phase 3 not installed)")
 
 
 # Error handlers
