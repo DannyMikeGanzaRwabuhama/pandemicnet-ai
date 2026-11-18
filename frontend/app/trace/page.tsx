@@ -40,8 +40,8 @@ export default function TracePage() {
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-slate-100">Contact Tracing</h1>
-                <p className="text-slate-400 mt-1">
+                <h1 className="text-3xl font-bold text-foreground">Contact Tracing</h1>
+                <p className="text-muted-foreground mt-1">
                     Trace direct and predicted contacts using AI-powered analysis
                 </p>
             </div>
@@ -76,7 +76,7 @@ export default function TracePage() {
                             Trace
                         </Button>
                     </div>
-                    <p className="text-xs text-slate-500 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                         Search for an individual to view their contact network and AI-predicted exposures
                     </p>
                 </CardContent>
@@ -86,17 +86,17 @@ export default function TracePage() {
             {isLoading && (
                 <div className="flex items-center justify-center py-12">
                     <div className="text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
-                        <p className="text-slate-400">Tracing contacts...</p>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+                        <p className="text-muted-foreground">Tracing contacts...</p>
                     </div>
                 </div>
             )}
 
             {/* Error State */}
             {error && (
-                <Alert className="bg-red-500/10 border-red-500/50">
-                    <AlertTriangle className="w-4 h-4 text-red-400" />
-                    <AlertDescription className="text-red-400">
+                <Alert className="bg-destructive/10 border-destructive/30">
+                    <AlertTriangle className="w-4 h-4 text-destructive" />
+                    <AlertDescription className="text-destructive">
                         Failed to trace contacts. Individual may not exist in the database.
                     </AlertDescription>
                 </Alert>
@@ -109,10 +109,10 @@ export default function TracePage() {
                     <div className="grid gap-4 md:grid-cols-4">
                         <Card>
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-sm text-slate-400">Direct Contacts</CardTitle>
+                                <CardTitle className="text-sm text-muted-foreground">Direct Contacts</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-3xl font-bold text-slate-100">
+                                <p className="text-3xl font-bold text-foreground">
                                     {traceResult.direct_contacts.length}
                                 </p>
                             </CardContent>
@@ -120,10 +120,10 @@ export default function TracePage() {
 
                         <Card>
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-sm text-slate-400">Predicted Contacts</CardTitle>
+                                <CardTitle className="text-sm text-muted-foreground">Predicted Contacts</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-3xl font-bold text-slate-100">
+                                <p className="text-3xl font-bold text-foreground">
                                     {traceResult.predicted_contacts.length}
                                 </p>
                             </CardContent>
@@ -131,10 +131,10 @@ export default function TracePage() {
 
                         <Card>
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-sm text-slate-400">Max Separation</CardTitle>
+                                <CardTitle className="text-sm text-muted-foreground">Max Separation</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-3xl font-bold text-slate-100">
+                                <p className="text-3xl font-bold text-foreground">
                                     {Object.keys(traceResult.degrees_of_separation).length}
                                 </p>
                             </CardContent>
@@ -142,10 +142,10 @@ export default function TracePage() {
 
                         <Card>
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-sm text-slate-400">Network Size</CardTitle>
+                                <CardTitle className="text-sm text-muted-foreground">Network Size</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-3xl font-bold text-slate-100">
+                                <p className="text-3xl font-bold text-foreground">
                                     {traceResult.network_stats.total_individuals}
                                 </p>
                             </CardContent>
@@ -154,15 +154,15 @@ export default function TracePage() {
 
                     {/* AI Insights */}
                     {traceResult.ai_insights && (
-                        <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/30">
+                        <Card className="bg-primary/5 border-primary/20">
                             <CardHeader>
-                                <CardTitle className="text-slate-100 flex items-center gap-2">
-                                    <Sparkles className="w-5 h-5 text-purple-400" />
+                                <CardTitle className="text-foreground flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-primary" />
                                     AI Insights
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm text-slate-300 whitespace-pre-line">
+                                <p className="text-sm text-foreground/90 whitespace-pre-line">
                                     {traceResult.ai_insights}
                                 </p>
                             </CardContent>
@@ -173,7 +173,7 @@ export default function TracePage() {
                         {/* Direct Contacts */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-slate-100 flex items-center gap-2">
+                                <CardTitle className="text-foreground flex items-center gap-2">
                                     <Users className="w-5 h-5" />
                                     Direct Contacts ({traceResult.direct_contacts.length})
                                 </CardTitle>
@@ -184,15 +184,15 @@ export default function TracePage() {
                                         {traceResult.direct_contacts.map((contact, idx) => (
                                             <div
                                                 key={idx}
-                                                className="p-4 bg-slate-800/50 rounded-lg border border-slate-700"
+                                                className="p-4 bg-card rounded-lg border border-border"
                                             >
                                                 <div className="flex items-start justify-between mb-2">
                                                     <div className="flex-1">
-                                                        <p className="font-semibold text-slate-100">
+                                                        <p className="font-semibold text-foreground">
                                                             {contact.contact_id}
                                                         </p>
                                                         {contact.venue_id && (
-                                                            <p className="text-xs text-slate-400 mt-1">
+                                                            <p className="text-xs text-muted-foreground mt-1">
                                                                 <MapPin className="w-3 h-3 inline mr-1" />
                                                                 {contact.venue_id}
                                                             </p>
@@ -201,8 +201,8 @@ export default function TracePage() {
                                                     <Badge
                                                         className={
                                                             contact.contact_infected
-                                                                ? 'bg-red-500/20 text-red-400 border-red-500/50'
-                                                                : 'bg-green-500/20 text-green-400 border-green-500/50'
+                                                                ? 'bg-destructive/15 text-destructive border-destructive/30'
+                                                                : 'bg-chart-4/20 text-chart-4 border-chart-4/30'
                                                         }
                                                     >
                                                         {contact.contact_infected ? 'INFECTED' : 'HEALTHY'}
@@ -211,23 +211,23 @@ export default function TracePage() {
 
                                                 <div className="grid grid-cols-2 gap-2 text-xs">
                                                     <div>
-                                                        <span className="text-slate-500">Date:</span>
-                                                        <p className="text-slate-300">
+                                                        <span className="text-muted-foreground">Date:</span>
+                                                        <p className="text-foreground/90">
                                                             {format(new Date(contact.contact_date), 'MMM dd, yyyy')}
                                                         </p>
                                                     </div>
                                                     {contact.duration_minutes && (
                                                         <div>
-                                                            <span className="text-slate-500">Duration:</span>
-                                                            <p className="text-slate-300">
+                                                            <span className="text-muted-foreground">Duration:</span>
+                                                            <p className="text-foreground/90">
                                                                 {contact.duration_minutes} min
                                                             </p>
                                                         </div>
                                                     )}
                                                     {contact.proximity && (
                                                         <div>
-                                                            <span className="text-slate-500">Proximity:</span>
-                                                            <p className="text-slate-300 capitalize">
+                                                            <span className="text-muted-foreground">Proximity:</span>
+                                                            <p className="text-foreground/90 capitalize">
                                                                 {contact.proximity}
                                                             </p>
                                                         </div>
@@ -238,8 +238,8 @@ export default function TracePage() {
                                     </div>
                                 ) : (
                                     <div className="text-center py-8">
-                                        <Users className="w-12 h-12 text-slate-700 mx-auto mb-2" />
-                                        <p className="text-sm text-slate-400">No direct contacts found</p>
+                                        <Users className="w-12 h-12 text-muted-foreground/40 mx-auto mb-2" />
+                                        <p className="text-sm text-muted-foreground">No direct contacts found</p>
                                     </div>
                                 )}
                             </CardContent>
@@ -248,8 +248,8 @@ export default function TracePage() {
                         {/* Predicted Contacts (ML) */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-slate-100 flex items-center gap-2">
-                                    <Sparkles className="w-5 h-5 text-purple-400" />
+                                <CardTitle className="text-foreground flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-primary" />
                                     AI-Predicted Contacts ({traceResult.predicted_contacts.length})
                                 </CardTitle>
                             </CardHeader>
@@ -259,21 +259,21 @@ export default function TracePage() {
                                         {traceResult.predicted_contacts.map((predicted, idx) => (
                                             <div
                                                 key={idx}
-                                                className="p-4 bg-slate-800/50 rounded-lg border border-slate-700"
+                                                className="p-4 bg-card rounded-lg border border-border"
                                             >
                                                 <div className="flex items-start justify-between mb-2">
                                                     <div className="flex-1">
-                                                        <p className="font-semibold text-slate-100">
+                                                        <p className="font-semibold text-foreground">
                                                             {predicted.unique_id}
                                                         </p>
                                                     </div>
                                                     <Badge
                                                         className={
                                                             predicted.risk_level === 'HIGH'
-                                                                ? 'bg-red-500/20 text-red-400 border-red-500/50'
+                                                                ? 'bg-destructive/15 text-destructive border-destructive/30'
                                                                 : predicted.risk_level === 'MEDIUM'
-                                                                    ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50'
-                                                                    : 'bg-green-500/20 text-green-400 border-green-500/50'
+                                                                    ? 'bg-chart-2/20 text-chart-2 border-chart-2/30'
+                                                                    : 'bg-chart-4/20 text-chart-4 border-chart-4/30'
                                                         }
                                                     >
                                                         {predicted.risk_level}
@@ -282,17 +282,17 @@ export default function TracePage() {
 
                                                 <div className="mb-3">
                                                     <div className="flex items-center justify-between text-xs mb-1">
-                                                        <span className="text-slate-400">Risk Score</span>
-                                                        <span className="text-slate-100 font-semibold">
-                              {(predicted.risk_score * 100).toFixed(0)}%
-                            </span>
+                                                        <span className="text-muted-foreground">Risk Score</span>
+                                                        <span className="text-foreground font-semibold">
+                                                            {(predicted.risk_score * 100).toFixed(0)}%
+                                                        </span>
                                                     </div>
-                                                    <div className="w-full bg-slate-700 rounded-full h-1.5">
+                                                    <div className="w-full bg-muted rounded-full h-1.5">
                                                         <div
                                                             className={`h-1.5 rounded-full ${
-                                                                predicted.risk_level === 'HIGH' ? 'bg-red-500' :
-                                                                    predicted.risk_level === 'MEDIUM' ? 'bg-yellow-500' :
-                                                                        'bg-green-500'
+                                                                predicted.risk_level === 'HIGH' ? 'bg-destructive' :
+                                                                    predicted.risk_level === 'MEDIUM' ? 'bg-chart-2' :
+                                                                        'bg-chart-4'
                                                             }`}
                                                             style={{ width: `${predicted.risk_score * 100}%` }}
                                                         />
@@ -300,17 +300,17 @@ export default function TracePage() {
                                                 </div>
 
                                                 {predicted.explanation && (
-                                                    <p className="text-xs text-slate-400 italic">
+                                                    <p className="text-xs text-muted-foreground italic">
                                                         {predicted.explanation}
                                                     </p>
                                                 )}
 
                                                 {predicted.top_factors && predicted.top_factors.length > 0 && (
-                                                    <div className="mt-2 pt-2 border-t border-slate-700">
-                                                        <p className="text-xs text-slate-500 mb-1">Top Factors:</p>
+                                                    <div className="mt-2 pt-2 border-t border-border">
+                                                        <p className="text-xs text-muted-foreground mb-1">Top Factors:</p>
                                                         <div className="flex flex-wrap gap-1">
                                                             {predicted.top_factors.slice(0, 3).map((factor, i) => (
-                                                                <Badge key={i} variant="outline" className="text-xs border-slate-600">
+                                                                <Badge key={i} variant="outline" className="text-xs">
                                                                     {factor.name}
                                                                 </Badge>
                                                             ))}
@@ -322,8 +322,8 @@ export default function TracePage() {
                                     </div>
                                 ) : (
                                     <div className="text-center py-8">
-                                        <Sparkles className="w-12 h-12 text-slate-700 mx-auto mb-2" />
-                                        <p className="text-sm text-slate-400">No predicted contacts</p>
+                                        <Sparkles className="w-12 h-12 text-muted-foreground/40 mx-auto mb-2" />
+                                        <p className="text-sm text-muted-foreground">No predicted contacts</p>
                                     </div>
                                 )}
                             </CardContent>
@@ -333,7 +333,7 @@ export default function TracePage() {
                     {/* Degrees of Separation */}
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-slate-100 flex items-center gap-2">
+                            <CardTitle className="text-foreground flex items-center gap-2">
                                 <Activity className="w-5 h-5" />
                                 Degrees of Separation
                             </CardTitle>
@@ -345,10 +345,10 @@ export default function TracePage() {
                                     .map(([degree, individuals]) => (
                                         <div key={degree}>
                                             <div className="flex items-center justify-between mb-2">
-                                                <h4 className="text-sm font-semibold text-slate-100">
+                                                <h4 className="text-sm font-semibold text-foreground">
                                                     Degree {degree}
                                                 </h4>
-                                                <Badge variant="outline" className="border-slate-600">
+                                                <Badge variant="outline">
                                                     {individuals.length} {individuals.length === 1 ? 'person' : 'people'}
                                                 </Badge>
                                             </div>
@@ -356,7 +356,8 @@ export default function TracePage() {
                                                 {individuals.slice(0, 10).map((id) => (
                                                     <Badge
                                                         key={id}
-                                                        className="bg-slate-800 text-slate-300 border-slate-700 cursor-pointer hover:bg-slate-700"
+                                                        variant="secondary"
+                                                        className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
                                                         onClick={() => {
                                                             setSearchId(id);
                                                             setActiveId(id);
@@ -366,7 +367,7 @@ export default function TracePage() {
                                                     </Badge>
                                                 ))}
                                                 {individuals.length > 10 && (
-                                                    <Badge variant="outline" className="border-slate-600">
+                                                    <Badge variant="outline">
                                                         +{individuals.length - 10} more
                                                     </Badge>
                                                 )}
@@ -384,11 +385,11 @@ export default function TracePage() {
                 <Card>
                     <CardContent className="flex items-center justify-center h-64">
                         <div className="text-center">
-                            <Search className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                            <p className="text-slate-400 text-lg font-medium">
+                            <Search className="w-16 h-16 text-muted-foreground/40 mx-auto mb-4" />
+                            <p className="text-foreground text-lg font-medium">
                                 Search for an individual to begin contact tracing
                             </p>
-                            <p className="text-sm text-slate-500 mt-2">
+                            <p className="text-sm text-muted-foreground mt-2">
                                 Enter an ID above to trace their contact network
                             </p>
                         </div>

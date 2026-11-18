@@ -31,7 +31,7 @@ export default function AgentControlDashboard() {
     const {data: status, refetch: refetchStatus} = useQuery({
         queryKey: ['simulation-status'],
         queryFn: () => api.getSimulationStatus(),
-        refetchInterval: (data) => (data?.running ? 2000 : false)
+        refetchInterval: (query) => (query?.state?.data?.running ? 2000 : false)
     });
 
 // Latest state query

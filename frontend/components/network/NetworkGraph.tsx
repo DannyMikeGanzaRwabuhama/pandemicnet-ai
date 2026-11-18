@@ -21,7 +21,7 @@ export default function NetworkGraph({
                                          onNodeClick,
                                          selectedNodeId
                                      }: NetworkGraphProps) {
-    const svgRef = useRef<SVGElement>(null);
+    const svgRef = useRef<SVGSVGElement>(null);
     const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function NetworkGraph({
         // Add zoom behavior
         const g = svg.append('g');
 
-        const zoom = d3.zoom<SVGElement, unknown>()
+        const zoom = d3.zoom<SVGSVGElement, unknown>()
             .scaleExtent([0.1, 4])
             .on('zoom', (event) => {
                 g.attr('transform', event.transform);
@@ -192,32 +192,32 @@ export default function NetworkGraph({
             <svg ref={svgRef} className={"w-full h-full"}/>
 
             {/*    Legend*/}
-            <div className="absolute bottom-4 right-4 bg-slate-800/90 p-4 rounded-lg backdrop-blur">
-                <h3 className={"text-sm font-semibold text-slate-100 mb-2"}>Legend</h3>
+            <div className="absolute bottom-4 right-4 bg-card/90 border border-border p-4 rounded-lg shadow-lg backdrop-blur">
+                <h3 className={"text-sm font-semibold text-foreground mb-2"}>Legend</h3>
                 <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full bg-red-500"/>
-                        <span className="text-xs text-slate-300">Infected</span>
+                        <div className="w-4 h-4 rounded-full bg-destructive"/>
+                        <span className="text-xs text-muted-foreground">Infected</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full bg-orange-500"/>
-                        <span className="text-xs text-slate-300">High Risk</span>
+                        <div className="w-4 h-4 rounded-full bg-chart-1"/>
+                        <span className="text-xs text-muted-foreground">High Risk</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full bg-yellow-500"/>
-                        <span className="text-xs text-slate-300">Medium Risk</span>
+                        <div className="w-4 h-4 rounded-full bg-chart-2"/>
+                        <span className="text-xs text-muted-foreground">Medium Risk</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full bg-green-500"/>
-                        <span className="text-xs text-slate-300">Low Risk</span>
+                        <div className="w-4 h-4 rounded-full bg-chart-4"/>
+                        <span className="text-xs text-muted-foreground">Low Risk</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full bg-blue-500"/>
-                        <span className="text-xs text-slate-300">Healthy</span>
+                        <div className="w-4 h-4 rounded-full bg-primary"/>
+                        <span className="text-xs text-muted-foreground">Healthy</span>
                     </div>
                 </div>
-                <div className="mt-3 pt-3 border-t border-slate-700">
-                    <p className="text-xs text-slate-400">
+                <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground">
                         Node size = connections<br/>
                         Drag to move • Scroll to zoom
                     </p>
@@ -226,10 +226,10 @@ export default function NetworkGraph({
 
             {/*    Hover tooltip*/}
             {hoveredNode && (
-                <div className="absolute top-4 left-4 p-3 rounded-lg backdrop-blur">
-                    <p className={"text-sm font-semibold border-primary"}>{hoveredNode}</p>
+                <div className="absolute top-4 left-4 p-3 rounded-lg bg-card/90 border border-border shadow-md backdrop-blur">
+                    <p className={"text-sm font-semibold text-foreground"}>{hoveredNode}</p>
                     {nodes.find(n => n.id === hoveredNode)?.location && (
-                        <p className={"text-xs text-slate-400"}>
+                        <p className={"text-xs text-muted-foreground"}>
                             {nodes.find(n => n.id === hoveredNode)?.location}
                         </p>
                     )}

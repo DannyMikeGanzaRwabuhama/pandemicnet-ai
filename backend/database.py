@@ -32,13 +32,13 @@ class Neo4jConnection:
             logger.info(f"✅ Connected to Neo4j at {settings.neo4j_uri}")
         except AuthError:
             logger.error("❌ Neo4j authentication failed. Check credentials.")
-            raise
+            self.driver = None
         except ServiceUnavailable:
-            logger.error("❌ Neo4j service unavailable. Is the database running?")
-            raise
+            logger.warning("⚠️ Neo4j service unavailable. Start Neo4j to enable graph features.")
+            self.driver = None
         except Exception as e:
-            logger.error(f"❌ Failed to connect to Neo4j: {str(e)}")
-            raise
+            logger.warning(f"⚠️ Could not connect to Neo4j: {str(e)}")
+            self.driver = None
 
     def close(self):
         """Close the database connection"""
@@ -48,6 +48,10 @@ class Neo4jConnection:
 
     def get_session(self):
         """Get a new database session"""
+        if not self.driver:
+            self._connect()
+        if not self.driver:
+            raise ServiceUnavailable("Database connection not established. Is Neo4j running?")
         return self.driver.session(database=settings.neo4j_database)
 
     def execute_query(self, query: str, parameters: dict = None):
@@ -105,4 +109,7 @@ def get_db() -> Neo4jConnection:
 
 def init_db():
     """Initialize database schema on startup"""
-    db.initialize_schema()
+    if db.driver:
+        db.initialize_schema()
+    else:
+        logger.warning("⚠️ Neo4j not connected; schema initialization deferred.")

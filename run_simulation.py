@@ -4,7 +4,7 @@ Run this to start the agent-based simulation
 """
 import asyncio
 import logging
-from datetime import date
+from datetime import date, timedelta
 import sys
 from pathlib import Path
 
@@ -91,15 +91,17 @@ async def run_interactive():
         if choice == "1":
             await orchestrator.run_single_day(current_day, start_date)
             current_day += 1
-            start_date = start_date.replace(day=start_date.day + 1)
+            start_date = start_date + timedelta(days=1)
 
         elif choice == "2":
             results = await orchestrator.run_simulation(days=7, start_date=start_date)
             current_day += 7
+            start_date = start_date + timedelta(days=7)
 
         elif choice == "3":
             results = await orchestrator.run_simulation(days=30, start_date=start_date)
             current_day += 30
+            start_date = start_date + timedelta(days=30)
 
         elif choice == "4":
             print("\n👋 Simulation ended")

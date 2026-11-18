@@ -40,7 +40,7 @@ async def get_full_network(
         WHERE p1.unique_id < p2.unique_id
         RETURN p1.unique_id as source,
                p2.unique_id as target,
-               r.contact_date as date,
+               toString(r.contact_date) as date,
                r.venue_id as venue
         LIMIT $limit
         """
@@ -206,7 +206,7 @@ async def get_personal_network(
         AND p1.unique_id < p2.unique_id
         RETURN p1.unique_id as source,
                p2.unique_id as target,
-               r.contact_date as date
+               toString(r.contact_date) as date
         """
 
     edges = db.execute_query(edges_query, {"node_ids": node_ids})

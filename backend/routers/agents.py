@@ -108,7 +108,7 @@ async def check_agents_available():
 
 
 @router.get("/config")
-async def get_agent_config():
+async def read_agent_config():
     """Get current agent configuration"""
     if not AGENTS_AVAILABLE:
         raise HTTPException(status_code=503, detail="Agent system not available")
@@ -144,7 +144,7 @@ async def update_agent_config(updates: AgentConfigUpdate):
     if updates.enable_auto_interventions is not None:
         config.enable_auto_interventions = updates.enable_auto_interventions
 
-    return {"message": "Configuration updated", "config": await get_agent_config()}
+    return {"message": "Configuration updated", "config": await read_agent_config()}
 
 
 @router.post("/simulation/start")

@@ -2,7 +2,8 @@
 PandemicNet AI - FastAPI Backend
 Main application entry point
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
@@ -97,7 +98,7 @@ async def health_check():
     return {
         "status": "healthy" if db_status == "healthy" else "degraded",
         "database": db_status,
-        "ml_model": "loaded" if ml_service.model else "not_loaded"
+        "ml_model": "loaded" if (ml_service.model is not None and hasattr(ml_service.model, "estimators_")) else "not_loaded"
     }
 
 
@@ -149,23 +150,42 @@ except ImportError:
 
 
 # Error handlers
+def get_cors_headers(request: Request) -> dict:
+    origin = request.headers.get("origin")
+    headers = {}
+    if origin and (origin in settings.cors_origins or "*" in settings.cors_origins or "localhost" in origin or "127.0.0.1" in origin):
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Credentials"] = "true"
+        headers["Access-Control-Allow-Methods"] = "*"
+        headers["Access-Control-Allow-Headers"] = "*"
+    return headers
+
+
 @app.exception_handler(404)
-async def not_found_handler(request, exc):
-    return {
-        "error": "Not Found",
-        "message": str(exc.detail) if hasattr(exc, 'detail') else "Resource not found",
-        "path": str(request.url)
-    }
+async def not_found_handler(request: Request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "error": "Not Found",
+            "message": str(exc.detail) if hasattr(exc, 'detail') else "Resource not found",
+            "path": str(request.url)
+        },
+        headers=get_cors_headers(request)
+    )
 
 
-@app.exception_handler(500)
-async def internal_error_handler(request, exc):
-    logger.error(f"Internal error: {exc}")
-    return {
-        "error": "Internal Server Error",
-        "message": "An unexpected error occurred",
-        "debug": str(exc) if settings.debug else None
-    }
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Global error: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "message": str(exc) if settings.debug else "An unexpected error occurred",
+            "debug": str(exc) if settings.debug else None
+        },
+        headers=get_cors_headers(request)
+    )
 
 
 if __name__ == "__main__":

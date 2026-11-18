@@ -20,8 +20,8 @@ interface MapViewProps {
     onNodeClick: (node: NetworkNode) => void;
 }
 
-// Mock coordinated for demonstration (in production, use real geocoding)
-const getCoordinated = (location?: string): [number, number] => {
+// Mock coordinates for demonstration (in production, use real geocoding)
+const getCoordinates = (location?: string): [number, number] => {
     const locations: Record<string, [number, number]> = {
         'Kigali': [-1.9536, 30.0606],
         'Butare': [-2.5967, 29.7392],

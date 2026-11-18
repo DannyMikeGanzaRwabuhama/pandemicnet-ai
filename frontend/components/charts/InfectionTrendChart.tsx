@@ -52,7 +52,7 @@ function generateHourlyContacts() {
 }
 
 // ======================================================
-// Infection Trend Chart (Updated for Darker 'Healthy' area in the image)
+// Infection Trend Chart
 // ======================================================
 interface InfectionTrendChartProps {
     data?: Array<{ date: string; infected: number; healthy: number; newCases: number }>;
@@ -66,36 +66,33 @@ export function InfectionTrendChart({data}: InfectionTrendChartProps) {
             <AreaChart data={chartData}>
                 <defs>
                     <linearGradient id="colorInfected" x1="0" y1="0" x2="0" y2="1">
-                        {/* Red for Infected */}
-                        <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="var(--destructive)" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="var(--destructive)" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorHealthy" x1="0" y1="0" x2="0" y2="1">
-                        {/* Use --chart-5 for a darker shade to match the image's healthy area */}
-                        <stop offset="5%" stopColor="hsl(var(--chart-5))" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="hsl(var(--chart-5))" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="var(--chart-4)" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="var(--chart-4)" stopOpacity={0}/>
                     </linearGradient>
                 </defs>
 
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3}/>
-                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12}/>
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12}/>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3}/>
+                <XAxis dataKey="date" stroke="var(--muted-foreground)" fontSize={12}/>
+                <YAxis stroke="var(--muted-foreground)" fontSize={12}/>
 
                 <Tooltip
                     contentStyle={{
-                        backgroundColor: 'hsl(var(--popover))',
-                        border: '1px solid hsl(var(--border))',
+                        backgroundColor: 'var(--popover)',
+                        border: '1px solid var(--border)',
                         borderRadius: '0.5rem',
-                        color: 'hsl(var(--popover-foreground))',
+                        color: 'var(--popover-foreground)',
                     }}
                 />
                 <Legend/>
 
-                {/* Plot Healthy first so Infected is overlaid on top of it */}
                 <Area
                     type="monotone"
                     dataKey="healthy"
-                    stroke="hsl(var(--chart-5))" // Using chart-5 for the line color
+                    stroke="var(--chart-4)"
                     fillOpacity={1}
                     fill="url(#colorHealthy)"
                     strokeWidth={2}
@@ -105,7 +102,7 @@ export function InfectionTrendChart({data}: InfectionTrendChartProps) {
                 <Area
                     type="monotone"
                     dataKey="infected"
-                    stroke="hsl(var(--destructive))"
+                    stroke="var(--destructive)"
                     fillOpacity={1}
                     fill="url(#colorInfected)"
                     strokeWidth={2}
@@ -117,7 +114,7 @@ export function InfectionTrendChart({data}: InfectionTrendChartProps) {
 }
 
 // ======================================================
-// Network Distribution Chart (No changes needed, already uses --chart-1)
+// Network Distribution Chart
 // ======================================================
 interface NetworkDistributionChartProps {
     data?: Array<{ connections: string; count: number }>;
@@ -129,57 +126,56 @@ export function NetworkDistributionChart({data}: NetworkDistributionChartProps) 
     return (
         <ResponsiveContainer width="100%" height={250}>
             <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3}/>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3}/>
                 <XAxis
                     dataKey="connections"
-                    stroke="hsl(var(--muted-foreground))"
+                    stroke="var(--muted-foreground)"
                     fontSize={12}
                     label={{value: 'Connections', position: 'insideBottom', offset: -5}}
                 />
                 <YAxis
-                    stroke="hsl(var(--muted-foreground))"
+                    stroke="var(--muted-foreground)"
                     fontSize={12}
                     label={{value: 'Count', angle: -90, position: 'insideLeft'}}
                 />
                 <Tooltip
                     contentStyle={{
-                        backgroundColor: 'hsl(var(--popover))',
-                        border: '1px solid hsl(var(--border))',
+                        backgroundColor: 'var(--popover)',
+                        border: '1px solid var(--border)',
                         borderRadius: '0.5rem',
+                        color: 'var(--popover-foreground)',
                     }}
                 />
                 <Legend/>
-                <Bar dataKey="count" fill="hsl(var(--chart-1))" radius={[8, 8, 0, 0]} name="Users"/>
+                <Bar dataKey="count" fill="var(--chart-1)" radius={[8, 8, 0, 0]} name="Users"/>
             </BarChart>
         </ResponsiveContainer>
     );
 }
 
 // ======================================================
-// Risk Distribution Chart (Updated for colors and labels to match the image)
+// Risk Distribution Chart
 // ======================================================
 interface RiskDistributionChartProps {
     data?: Array<{ name: string; value: number }>;
 }
 
 export function RiskDistributionChart({data}: RiskDistributionChartProps) {
-    // Data adjusted to match the percentages in the image: Healthy: 55%, Low: 18%, Medium: 13%, High: 8%, Infected: 6%
     const chartData =
         data || [
-            {name: 'Healthy', value: 55}, // Darkest slice in the image (or blank space)
+            {name: 'Healthy', value: 55},
             {name: 'Low Risk', value: 18},
             {name: 'Medium Risk', value: 13},
             {name: 'High Risk', value: 8},
             {name: 'Infected', value: 6},
         ];
 
-    // Colors assigned based on the visual distribution in the image
     const COLORS = [
-        '#000000', // Black/dark color for Healthy (55%) to match the image's dark pie slice
-        'hsl(var(--chart-4))', // Low Risk (18%)
-        'hsl(var(--chart-3))', // Medium Risk (13%)
-        'hsl(var(--chart-2))', // High Risk (8%)
-        'hsl(var(--destructive))', // Infected (6%)
+        'var(--chart-4)',
+        'var(--chart-3)',
+        'var(--chart-2)',
+        'var(--chart-1)',
+        'var(--destructive)',
     ];
 
     return (
@@ -190,9 +186,8 @@ export function RiskDistributionChart({data}: RiskDistributionChartProps) {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    // Remove custom label function to prevent clutter, as per the image
                     outerRadius={100}
-                    fill="#8884d8"
+                    fill="var(--primary)"
                     dataKey="value"
                 >
                     {chartData.map((entry, index) => (
@@ -201,18 +196,17 @@ export function RiskDistributionChart({data}: RiskDistributionChartProps) {
                 </Pie>
                 <Tooltip
                     contentStyle={{
-                        backgroundColor: 'hsl(var(--popover))',
-                        border: '1px solid hsl(var(--border))',
+                        backgroundColor: 'var(--popover)',
+                        border: '1px solid var(--border)',
                         borderRadius: '0.5rem',
+                        color: 'var(--popover-foreground)',
                     }}
-                    // Custom tooltip formatter to display value as percentage
-                    formatter={(value, name, props) => {
+                    formatter={(value, name) => {
                         const total = chartData.reduce((sum, entry) => sum + entry.value, 0);
                         const percentage = ((value as number / total) * 100).toFixed(1);
                         return [`${percentage}%`, name];
                     }}
                 />
-                {/* Custom Legend to match the colors and labels from the image */}
                 <Legend
                     layout="horizontal"
                     verticalAlign="bottom"
@@ -225,7 +219,7 @@ export function RiskDistributionChart({data}: RiskDistributionChartProps) {
 }
 
 // ======================================================
-// Contact Frequency Chart (No changes needed, uses --primary)
+// Contact Frequency Chart
 // ======================================================
 interface ContactFrequencyChartProps {
     data?: Array<{ hour: string; contacts: number }>;
@@ -237,22 +231,23 @@ export function ContactFrequencyChart({data}: ContactFrequencyChartProps) {
     return (
         <ResponsiveContainer width="100%" height={200}>
             <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3}/>
-                <XAxis dataKey="hour" stroke="hsl(var(--muted-foreground))" fontSize={11}/>
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11}/>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3}/>
+                <XAxis dataKey="hour" stroke="var(--muted-foreground)" fontSize={11}/>
+                <YAxis stroke="var(--muted-foreground)" fontSize={11}/>
                 <Tooltip
                     contentStyle={{
-                        backgroundColor: 'hsl(var(--popover))',
-                        border: '1px solid hsl(var(--border))',
+                        backgroundColor: 'var(--popover)',
+                        border: '1px solid var(--border)',
                         borderRadius: '0.5rem',
+                        color: 'var(--popover-foreground)',
                     }}
                 />
                 <Line
                     type="monotone"
                     dataKey="contacts"
-                    stroke="hsl(var(--primary))"
+                    stroke="var(--primary)"
                     strokeWidth={3}
-                    dot={{fill: 'hsl(var(--primary))', strokeWidth: 2, r: 4}}
+                    dot={{fill: 'var(--primary)', strokeWidth: 2, r: 4}}
                     activeDot={{r: 6}}
                     name="Contacts"
                 />
@@ -260,6 +255,3 @@ export function ContactFrequencyChart({data}: ContactFrequencyChartProps) {
         </ResponsiveContainer>
     );
 }
-
-// Export the components
-// export { InfectionTrendChart, NetworkDistributionChart, RiskDistributionChart, ContactFrequencyChart };

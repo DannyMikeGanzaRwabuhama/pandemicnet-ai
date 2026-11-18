@@ -27,7 +27,7 @@ export default async function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
         <body
-            className={`${inter.className} bg-background text-slate-100 antialiased`}
+            className={`${inter.className} bg-background text-foreground antialiased`}
         >
         <Providers
             attribute={"class"}

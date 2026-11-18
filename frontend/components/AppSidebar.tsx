@@ -20,9 +20,9 @@ import {NavUser} from "@/components/NavUser";
 
 const data = {
     user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
+        name: "PandemicNet Admin",
+        email: "admin@pandemicnet.ai",
+        avatar: "",
     },
 }
 

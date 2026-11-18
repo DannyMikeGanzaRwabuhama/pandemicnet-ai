@@ -62,6 +62,7 @@ venv.bak/
 
 # Environment Variables
 
+# Environments
 .env.*.local
 
 
@@ -99,9 +100,10 @@ models/*.joblib
 
 
 
-# Logs
+# Logs and Reports
 
 logs/
+reports/
 
 *.log
 

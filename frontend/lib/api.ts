@@ -12,6 +12,7 @@ import {
     InfectionReport,
     NetworkData,
     NetworkStats,
+    NetworkStatsResponse,
     RiskAssessment, SimulationDayResult, SimulationLatestState, SimulationStatus,
     Superspreader,
 } from '@/lib/types';
@@ -21,7 +22,7 @@ class PandemicNetAPI {
 
     constructor(baseURL?: string) {
         this.client = axios.create({
-            baseURL: baseURL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+            baseURL: baseURL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
             timeout: 30000,
             headers: {'Content-Type': 'application/json'},
         });
@@ -93,9 +94,9 @@ class PandemicNetAPI {
         return data;
     }
 
-    async getNetworkStats(): Promise<NetworkStats> {
+    async getNetworkStats(): Promise<NetworkStatsResponse> {
         const {data} = await this.client.get('/graph/statistics');
-        return data; // Return flat NetworkStats object
+        return data;
     }
 
     async getCentrality(limit = 10): Promise<CentralityNode[]> {

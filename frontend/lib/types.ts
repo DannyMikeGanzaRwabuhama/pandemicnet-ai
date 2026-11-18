@@ -74,6 +74,11 @@ export interface NetworkStats {
     clusters?: number;
 }
 
+export interface NetworkStatsResponse {
+    statistics: NetworkStats;
+    ai_insights?: string;
+}
+
 export interface CentralityNode {
     unique_id: string;
     degree: number;
@@ -182,7 +187,7 @@ export interface D3Node extends NetworkNode {
     vy?: number;
 }
 
-export interface D3Link extends NetworkEdge {
+export interface D3Link extends Omit<NetworkEdge, 'source' | 'target'> {
     source: string | D3Node;
     target: string | D3Node;
     index?: number;
